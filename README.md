@@ -68,7 +68,8 @@ NOTICE! This app should use the above environment variables for the database.
       
       
 ## Logging
-
-  -database connections
-  -HTTP requests
-  -User logins
+  The following logs will be created:
+  
+    1.database connections
+    2.HTTP requests
+    3.User logins
