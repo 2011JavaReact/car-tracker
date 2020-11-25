@@ -1,3 +1,4 @@
+import java.io.Console;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -55,15 +56,12 @@ public class Main {
 			connection = DriverManager.getConnection(url, username, password);
 			System.out.println(connection);
 			Logger logger = Logger.getLogger(CustomerServlet.class);
-			logger.debug("Connected to remote databse.");
+			logger.info("Connected to remote databse.");
 			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
 		
 
 	}

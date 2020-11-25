@@ -37,6 +37,8 @@ public class DatabaseCarDAO {
 			Statement stmt = sqlConn.createStatement();
 			ResultSet rs = stmt.executeQuery(sqlQuery);
 			
+			logger.info("Connection made to external database." + " Database: " + sqlConn);
+			
 			while (rs.next()) {
 				int id = rs.getInt(1);
 				String name = rs.getString(2);
@@ -45,7 +47,7 @@ public class DatabaseCarDAO {
 				Car car = new Car(id, name, price);
 				
 				cars.add(car);
-				logger.debug("Connection made to external database.");
+				
 				sqlConn.close();
 			}
 		} catch (SQLException e) {

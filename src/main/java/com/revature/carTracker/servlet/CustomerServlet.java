@@ -19,7 +19,7 @@ import com.revature.carTracker.dao.DatabaseCustomerDAO;
 public class CustomerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ObjectMapper objectMapper = new ObjectMapper();
-	private DatabaseCustomerDAO customerDAO = new DatabaseCustomerDAO();
+	private DatabaseCarDAO carDAO = new DatabaseCarDAO();
 	Logger logger = Logger.getLogger(CustomerServlet.class);
        
     /**
@@ -35,7 +35,7 @@ public class CustomerServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		logger.debug("Executed HTTP GET request.");
+		logger.info("Executed HTTP GET request.");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String name = request.getParameter("customer");
@@ -50,7 +50,8 @@ public class CustomerServlet extends HttpServlet {
 			if (currentUser == null || currentPassword == null) {
 				response.setStatus(400);
 			} else {
-				String jsonString = objectMapper.writeValueAsString(customerDAO.getAllCustomers());
+				String jsonString = objectMapper.writeValueAsString(carDAO.getAllCars());
+				logger.info(currentUser + " logged in as: ADMIN.");
 				response.getWriter().append("Welcome " + currentUser);
 				response.getWriter().append(jsonString);
 				response.setStatus(200);

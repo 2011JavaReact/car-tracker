@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.carTracker.dao.DatabaseCarDAO;
+import com.revature.carTracker.dao.DatabaseCustomerDAO;
 import com.revature.carTracker.model.Car;
 
 /**
@@ -24,7 +25,8 @@ import com.revature.carTracker.model.Car;
 public class CarServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ObjectMapper objectMapper = new ObjectMapper();
-	private DatabaseCarDAO carDAO = new DatabaseCarDAO(); 
+	private DatabaseCarDAO carDAO = new DatabaseCarDAO();
+	private DatabaseCustomerDAO customerDAO=new DatabaseCustomerDAO();
 	Logger logger = Logger.getLogger(CarServlet.class);
     
     public CarServlet() {
@@ -38,7 +40,7 @@ public class CarServlet extends HttpServlet {
     @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-    	logger.debug("Executed HTTP GET request.");
+    	logger.info("Executed HTTP GET request.");
     	//Set endpoint parameters and 
     	//create HTTP session for login.
 		String username = request.getParameter("username");
@@ -59,14 +61,27 @@ public class CarServlet extends HttpServlet {
 			} else {
 				//Retrieve table and append to JSON format.
 				String jsonString = objectMapper.writeValueAsString(carDAO.getAllCars());
-				response.getWriter().append("Welcome " + currentUser);
-				response.getWriter().append(jsonString);
-				
-				//Set successful HTTP status and release memory
-				//from response.getWriter().
-				response.setStatus(200);
-				response.getWriter().flush();
-				response.getWriter().close();
+				String jsonString2 = objectMapper.writeValueAsString(customerDAO.getAllCustomers());
+				if (currentPassword.equals("admin")) {
+					logger.info(currentUser + " logged in as: ADMIN. ");
+					response.getWriter().append("Welcome " + currentUser);
+					response.getWriter().append(jsonString);
+					response.getWriter().append(jsonString2);
+					
+					//Set successful HTTP status and release memory
+					//from response.getWriter().
+					response.setStatus(200);
+					response.getWriter().flush();
+					response.getWriter().close();
+				} else {
+					logger.info(currentUser + " logged in.");
+					response.getWriter().append("Welcome " + currentUser);
+					response.getWriter().append(jsonString);
+					
+					response.setStatus(200);
+					response.getWriter().flush();
+					response.getWriter().close();
+				}
 			}
 		} catch (IOException e) {
 			response.setStatus(400);

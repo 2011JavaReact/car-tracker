@@ -10,6 +10,13 @@ import org.junit.Test;
 import com.revature.carTracker.model.Car;
 import com.revature.carTracker.model.Customer;
 
+/**
+ * Tests for successful instantiation of Customer class
+ * and working get and set methods.
+ * @author Frank Johnson III
+ *
+ */
+
 public class CustomerTest {
 	
 	Customer customer;

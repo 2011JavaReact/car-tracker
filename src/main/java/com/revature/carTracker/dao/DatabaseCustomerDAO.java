@@ -17,6 +17,10 @@ import com.revature.carTracker.util.JDBC;
 public class DatabaseCustomerDAO {
 	Logger logger = Logger.getLogger(DatabaseCustomerDAO.class);
 	
+	/**
+	 * Retrieves all data from Customers table.
+	 * @return ArrayList<Customer>
+	 */
 	public ArrayList<Customer> getAllCustomers() {
 		String sqlQuery = "SELECT * " 
 						+ "FROM Customers";
@@ -27,6 +31,8 @@ public class DatabaseCustomerDAO {
 			Statement stmt = sqlConn.createStatement();
 			ResultSet rs = stmt.executeQuery(sqlQuery);
 			
+			logger.info("Connection made to external database." + " Database: " + sqlConn);
+			
 			while (rs.next()) {
 				int id = rs.getInt(1);
 				String name = rs.getString(3); //Skip to column 3 to get names.
@@ -34,7 +40,7 @@ public class DatabaseCustomerDAO {
 				Customer customer = new Customer(id, name);
 				
 				customers.add(customer);
-				logger.debug("Connection made to external database.");
+				
 				sqlConn.close();
 			}
 		} catch (SQLException e) {
