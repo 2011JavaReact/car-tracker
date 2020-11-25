@@ -13,28 +13,35 @@ Logging in with a non-administrator password allows the user to view data only i
 # Endpoints
 
 ## GET /cars?username=john&password=smith
-Get all of the cars in the database Inventory table. See example output below
-```json
-{"id":"1", "name":"Toyota", "price":"28000"}
-```
+  Get all of the cars in the database Inventory table. See example output below:
+  ```json
+  {"id":"1", "name":"Toyota", "price":"28000"}
+  ```
 ## GET /customers?username=john&password=smith
-```json
-{"id":"1", "car_id":"2", "price":"Bill"}
-```
+  ```json
+  {"id":"1", "car_id":"2", "price":"Bill"}
+  ```
+
+## GET /cars?username=john&password=admin
+Get all data in both the Inventory and Customers table. See example output below:
+  ```json
+  {"id":"1", "name":"Toyota", "price":"28000"},
+  {"id":"1", "car_id":"2", "price":"Bill"}
+  ```
 # How to Startup the Application
 ## Prerequisites
-You will have to download the following in order to set up the app locally:
-- maven
-- tomcat
-- jdk8
-- Running PostgreSQL DB
+  You will have to download the following in order to set up the app locally:
+  - maven
+  - tomcat
+  - jdk8
+  - Running PostgreSQL DB
 
 Make sure you have the following environment variables configured:
-- JAVA_HOME
-- CATALINA_HOME
-- DB_URL = jdbc:postgresql://carsdb.c6k6qxez43qs.us-east-2.rds.amazonaws.com:5432/postgres
-- DB_USERNAME = postgres
-- DB_PASSWORD = revature
+  - JAVA_HOME
+  - CATALINA_HOME
+  - DB_URL = jdbc:postgresql://carsdb.c6k6qxez43qs.us-east-2.rds.amazonaws.com:5432/postgres
+  - DB_USERNAME = postgres
+  - DB_PASSWORD = revature
 
 NOTICE! This app should use the above environment variables for the database.
 
@@ -58,3 +65,10 @@ NOTICE! This app should use the above environment variables for the database.
   - IDE:
       - setup tomcat to run virtually within your ide
       - startup tomcat and navigate to {URL} (usually localhost:8080)
+      
+      
+## Logging
+
+  -database connections
+  -HTTP requests
+  -User logins
