@@ -4,6 +4,12 @@ This application connects to a remote database that has been pre-populated with 
 
 This application was created using: Java 8, JDBC, Servlets, Tomcat 9.0, PostgreSQL, JUnit, Maven, AWS RDS, and DBeaver.
 
+Logging in with and administrator password allows the user to view all data in all tables (Inventory and Customers table).
+
+The administrator password is "admin".
+  
+Logging in with a non-administrator password allows the user to view data only in the Inventory table.
+
 # Endpoints
 
 ## GET /cars?username=john&password=smith
