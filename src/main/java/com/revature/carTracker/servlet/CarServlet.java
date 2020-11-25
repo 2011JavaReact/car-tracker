@@ -67,6 +67,7 @@ public class CarServlet extends HttpServlet {
 					response.getWriter().append("Welcome " + currentUser);
 					response.getWriter().append(jsonString);
 					response.getWriter().append(jsonString2);
+					response.setContentType("application/json");
 					
 					//Set successful HTTP status and release memory
 					//from response.getWriter().
@@ -74,9 +75,10 @@ public class CarServlet extends HttpServlet {
 					response.getWriter().flush();
 					response.getWriter().close();
 				} else {
-					logger.info(currentUser + " logged in.");
+					logger.info(currentUser + " logged in as: STANDARD USER.");
 					response.getWriter().append("Welcome " + currentUser);
 					response.getWriter().append(jsonString);
+					response.setContentType("application/json");
 					
 					response.setStatus(200);
 					response.getWriter().flush();

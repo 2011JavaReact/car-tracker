@@ -51,9 +51,11 @@ public class CustomerServlet extends HttpServlet {
 				response.setStatus(400);
 			} else {
 				String jsonString = objectMapper.writeValueAsString(carDAO.getAllCars());
-				logger.info(currentUser + " logged in as: ADMIN.");
+				logger.info(currentUser + " logged in as: STANDARD USER.");
 				response.getWriter().append("Welcome " + currentUser);
 				response.getWriter().append(jsonString);
+				response.setContentType("application/json");
+				
 				response.setStatus(200);
 				response.getWriter().flush();
 				response.getWriter().close();
