@@ -2,6 +2,8 @@ DROP TABLE IF EXISTS Inventory;
 
 DROP TABLE IF EXISTS Customers;
 
+DROP TABLE IF EXISTS Credentials;
+
 CREATE TABLE Inventory (
 
 	car_id SERIAL PRIMARY KEY,
@@ -20,11 +22,17 @@ CREATE TABLE Customers (
 			references Inventory(car_id)
 );
 
-SELECT *
-FROM Inventory;
+CREATE TABLE Credentials (
 
-SELECT *
-FROM Customers;
+	id SERIAL PRIMARY KEY,
+	username VARCHAR(255) UNIQUE NOT NULL,
+	password VARCHAR(255) NOT null,
+	customer_id INT not null,
+	isAdmin boolean not null,
+	constraint fk_customer
+		foreign key(customer_id)
+			references Customers(customer_id)
+);
 
 INSERT INTO Inventory (name, price)
 VALUES ('Toyota Tacoma', '26150'),
@@ -36,4 +44,8 @@ INSERT INTO Customers (name, car_id)
 VALUES ('Frank', 1),
 		('Ralph', 2),
 		('Jake', 1);
+
+INSERT INTO Credentials (username, password, customer_id, isadmin)
+VALUES ('adamAdmin', 'admin', 1, true),
+		('normanNorm', 'normie', 3, false);
 	
