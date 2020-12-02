@@ -34,56 +34,46 @@ public class CustomerServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-    /**Retrieves table from DB after user
-	 * enters login criteria or retrieves
-	 * data by specified criteria.
+    /**Retrieves table from DB.
+	 * Can retrieve specific data by
+	 * specified criteria.
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//Set endpoint parameters, 
-    	//create HTTP session, and set attributes.
+		//Set endpoint parameters and 
+    	//create HTTP session.
 		logger.info("Executed HTTP GET request.");
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
 		String name = request.getParameter("customerName");
 		String id = request.getParameter("customerId");
-		HttpSession session = request.getSession();
-		session.setAttribute("username", username);
-		session.setAttribute("password", password);
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			response.setStatus(401);
+			return;
+		}
 		String currentUsername = (String)session.getAttribute("username");
-		String currentPassword = (String)session.getAttribute("password");
 		String jsonString = objectMapper.writeValueAsString(customerDAO.getAllCustomers());
 		
-		try {
-			//Return error page if credentials are empty.
-			if (currentUsername == null || currentPassword == null) {
-				response.setStatus(400);
-			} 
+		try { 
 			//Return data by ID#.
-			if (id != null && currentPassword.equals("admin")) {
+			if (id != null && (boolean)session.getAttribute("isAdmin")) {
 				ArrayList<Customer> c = customerDAO.getCustomerById(Integer.parseInt(id));
 				response.setContentType("application/json");
-				logger.info(currentUsername + " logged in as: STANDARD USER.");
-				response.getWriter().append("Welcome " + currentUsername + "!");
 				response.getWriter().append(objectMapper.writeValueAsString(c));
 				response.setStatus(200);
 				response.getWriter().flush();
 				response.getWriter().close();
 			}
 			//Return data by name.
-			if (name != null && currentPassword.equals("admin")) {
+			if (name != null && (boolean)session.getAttribute("isAdmin")) {
 				ArrayList<Customer> c = customerDAO.getCustomerByName(name);
 				response.setContentType("application/json");
-				logger.info(currentUsername + " logged in as: STANDARD USER.");
-				response.getWriter().append("Welcome " + currentUsername + "!");
 				response.getWriter().append(objectMapper.writeValueAsString(c));
 				response.setStatus(200);
 				response.getWriter().flush();
 				response.getWriter().close();
 			}
 			//Retrieve table for ADMIN.
-			if (currentPassword.equals("admin")) {
-				response.getWriter().append("Welcome " + currentUsername + "!");
+			if ((boolean)session.getAttribute("isAdmin")) {
 				response.getWriter().append(jsonString);
 				response.setContentType("application/json");
 				response.setStatus(200);
@@ -101,50 +91,38 @@ public class CustomerServlet extends HttpServlet {
 		} 
 	}
 
-	/**Adds a row to the Customers table after user
-	 * enters login criteria.
+	/**Adds a row to the Customers table..
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//Set endpoint parameters, 
-    	//create HTTP session, and set attributes.
+		//Set endpoint parameters and 
+    	//create HTTP session.
     	logger.info("Executed HTTP POST request.");
-    	String username = request.getParameter("username");
-		String password = request.getParameter("password");
 		String id = request.getParameter("carId");
 		String name = request.getParameter("customerName");
-		HttpSession session = request.getSession();
-		session.setAttribute("username", username);
-		session.setAttribute("password", password);
-		session.setAttribute("carId", id);
-		session.setAttribute("customerName", name);
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			response.setStatus(401);
+			return;
+		}
 		String currentUsername = (String)session.getAttribute("username");
-		String currentPassword = (String)session.getAttribute("password");
 		String jsonString = objectMapper.writeValueAsString(customerDAO.addCustomer(Integer.parseInt(id), name));
 		
 		try {
-			//Return error page if login is 
-			//left empty.
-			if (currentUsername == null || currentPassword == null || id == null) {
-				response.setStatus(400);
-				response.getWriter().print("Please enter a username and password.");
+			//Insert new data into DB if user has admin rights.
+			if ((boolean)session.getAttribute("isAdmin")) {
+				logger.info("Customer added.");
+				response.getWriter().append(jsonString);
+				response.setContentType("application/json");
+				logger.info(currentUsername + " successfully added new data to Customers table.");
+				response.setStatus(200);
+				response.getWriter().flush();
+				response.getWriter().close();
 			} else {
-				//Insert new data into DB if password is correct.
-				if (currentPassword.equals("admin")) {
-					logger.info(currentUsername + " logged in as: ADMIN.");
-					response.getWriter().append("Welcome " + currentUsername + "!");
-					response.getWriter().append(jsonString);
-					response.setContentType("application/json");
-					logger.info(currentUsername + " successfully added new data to Customers table.");
-					response.setStatus(200);
-					response.getWriter().flush();
-					response.getWriter().close();
-				} else {
-					//Set status for unauthorized user.
-					response.setStatus(401);
-					response.getWriter().print("You don't have authorization to modify data.");
-					logger.info(currentUsername + " failed to add data to Customers table.");
-				}
+				//Set status for unauthorized user.
+				response.setStatus(401);
+				response.getWriter().print("You don't have authorization to modify data.");
+				logger.info(currentUsername + " failed to add data to Customers table.");
 			}
 		} catch (IOException e) {
 			response.setStatus(400);
@@ -152,52 +130,40 @@ public class CustomerServlet extends HttpServlet {
 		}
     }
 	
-	/**Deletes a row from the Customers table after user
-	 * enters login criteria.
+	/**Deletes a row from the Customers table.
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	@Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException  {
-    	logger.info("Executed HTTP DELETE request.");
-    	//Set endpoint parameters, 
-    	//create HTTP session, and set attributes.
-    	String username = request.getParameter("username");
-		String password = request.getParameter("password");
+    	//Set endpoint parameters and
+    	//create HTTP session.
+		logger.info("Executed HTTP DELETE request.");
 		String id = request.getParameter("customerId");
-		HttpSession session = request.getSession();
-		session.setAttribute("username", username);
-		session.setAttribute("password", password);
-		session.setAttribute("customerId", id);
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			response.setStatus(401);
+			return;
+		}
 		String currentUsername = (String)session.getAttribute("username");
-		String currentPassword = (String)session.getAttribute("password");
 		String currentId = (String)session.getAttribute("customerId");
-		
 		try {
-			//Return error page if login is 
-			//left empty.
-			if (currentUsername == null || currentPassword == null) {
-				response.setStatus(400);
-				response.getWriter().print("Please enter a username and password.");
-			} else {
-				//Delete row in DB if user has ADMIN
-				//rights and and ID is entered.
-				if (currentPassword.equals("admin")) {
-					if (id != null) {
-						logger.info(currentUsername + " logged in as: ADMIN.");
-						response.getWriter().append("Welcome " + currentUsername + "!\n" + "Row at ID#: " + id + " has been deleted.");
-						customerDAO.deleteCustomer(Integer.parseInt(id));
-						response.setContentType("application/json");
-						logger.info(currentUsername + " successfully deleted a row in Customers table.");
-						response.setStatus(200);
-						response.getWriter().flush();
-						response.getWriter().close();
-					}
-				} else {
-					//Set status for unauthorized user.
-					response.setStatus(401);
-					response.getWriter().print("You don't have authorization to modify data.");
-					logger.info(currentUsername + " failed to delete row from Customers table.");
+			//Delete row in DB if user has ADMIN
+			//rights and and ID is entered.
+			if ((boolean)session.getAttribute("isAdmin")) {
+				if (id != null) {
+					response.getWriter().append("Row at ID#: " + id + " has been deleted.");
+					customerDAO.deleteCustomer(Integer.parseInt(id));
+					response.setContentType("application/json");
+					logger.info(currentUsername + " successfully deleted a row in Customers table.");
+					response.setStatus(200);
+					response.getWriter().flush();
+					response.getWriter().close();
 				}
+			} else {
+				//Set status for unauthorized user.
+				response.setStatus(401);
+				response.getWriter().print("You don't have authorization to modify data.");
+				logger.info(currentUsername + " failed to delete row from Customers table.");
 			}
 		} catch (IOException e) {
 			response.setStatus(400);

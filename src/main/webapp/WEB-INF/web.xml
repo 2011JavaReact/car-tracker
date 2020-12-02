@@ -33,14 +33,19 @@
     <servlet-name>CustomerServlet</servlet-name>
     <url-pattern>/customers</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CustomerServlet</servlet-name>
+    <url-pattern>/customers*</url-pattern>
+  </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>LoginServlet</display-name>
-    <servlet-name>LoginServlet</servlet-name>
-    <servlet-class>com.revature.carTracker.servlet.LoginServlet</servlet-class>
+    <display-name>UserLoginServlet</display-name>
+    <servlet-name>UserLoginServlet</servlet-name>
+    <servlet-class>com.revature.carTracker.servlet.UserLoginServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>LoginServlet</servlet-name>
+    <servlet-name>UserLoginServlet</servlet-name>
     <url-pattern>/login</url-pattern>
+    <url-pattern>/logout</url-pattern>
   </servlet-mapping>
 </web-app>
