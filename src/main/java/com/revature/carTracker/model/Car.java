@@ -4,8 +4,7 @@ public class Car {
 	
 	private int id;
 	private String name;
-	private String price;
-	private Customer customer;
+	private int price;
 	
 	public Car() {
 		super();
@@ -17,27 +16,11 @@ public class Car {
 		this.name = name;
 	}
 	
-	public Car (int id, String name, String price)
+	public Car (int id, String name, int price)
 	{
 		this.id = id;
 		this.price = price;
 		this.name = name;
-	}
-	
-	public Car (int id, String name, String price, Customer customer)
-	{
-		this.id = id;
-		this.price = price;
-		this.name = name;
-		this.customer = customer;
-	}
-	
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
 	}
 
 	public String getName() {
@@ -52,11 +35,11 @@ public class Car {
 		this.id = id;
 	}
 
-	public String getPrice() {
+	public int getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
 

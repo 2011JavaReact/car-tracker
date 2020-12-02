@@ -33,57 +33,72 @@ public class CarServlet extends HttpServlet {
         super();
     }
 
-	/**Retrieves a database table after user
-	 * enters login criteria
+	/**Retrieves table(s) from DB after user
+	 * enters login criteria or retrieves
+	 * data by specified criteria.
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
     @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+    	//Set endpoint parameters, 
+    	//create HTTP session, and set attributes.
     	logger.info("Executed HTTP GET request.");
-    	//Set endpoint parameters and 
-    	//create HTTP session for login.
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String name = request.getParameter("carName");
+		String id = request.getParameter("carId");
 		HttpSession session = request.getSession();
-		
+		session.setAttribute("username", username);
+		session.setAttribute("password", password);
+		String currentUsername = (String)session.getAttribute("username");
+		String currentPassword = (String)session.getAttribute("password");
+		String jsonString = objectMapper.writeValueAsString(carDAO.getAllCars());
+		String jsonString2 = objectMapper.writeValueAsString(customerDAO.getAllCustomers());
+
 		try {
-			session.setAttribute("username", username);
-			session.setAttribute("password", password);
-			String currentUser = (String)session.getAttribute("username");
-			String currentPassword = (String)session.getAttribute("password");
-			
-			//Return error page if login is 
-			//left empty.
-			if (currentUser == null || currentPassword == null) {
+			//Return error page if credentials are empty.
+			if (currentUsername == null || currentPassword == null) {
 				response.setStatus(400);
+				response.getWriter().print("Please enter a username and password.");
+			} 
+			//Return data by ID#.
+			if (id != null) {
+				ArrayList<Car> c = carDAO.getCarById(Integer.parseInt(id));
+				response.setContentType("application/json");
+				response.getWriter().append("Welcome " + currentUsername + "!");
+				response.getWriter().append(objectMapper.writeValueAsString(c));
+				//Set successful HTTP status and release resources.
+				response.setStatus(200);
+				response.getWriter().flush();
+				response.getWriter().close();
+			}
+			//Return data by name.
+			if (name != null) {
+				ArrayList<Car> c = carDAO.getCarByName(name);
+				response.setContentType("application/json");
+				response.getWriter().append("Welcome " + currentUsername + "!");
+				response.getWriter().append(objectMapper.writeValueAsString(c));
+				response.setStatus(200);
+				response.getWriter().flush();
+				response.getWriter().close();
+			}
+			//Retrieve table for ADMIN.
+			if (currentPassword.equals("admin")) {
+				response.getWriter().append("Welcome " + currentUsername + "!");
+				response.getWriter().append(jsonString);
+				response.getWriter().append(jsonString2);
+				response.setContentType("application/json");
+				response.setStatus(200);
+				response.getWriter().flush();
+				response.getWriter().close();
 			} else {
-				//Retrieve table and append to JSON format.
-				String jsonString = objectMapper.writeValueAsString(carDAO.getAllCars());
-				String jsonString2 = objectMapper.writeValueAsString(customerDAO.getAllCustomers());
-				if (currentPassword.equals("admin")) {
-					logger.info(currentUser + " logged in as: ADMIN. ");
-					response.getWriter().append("Welcome " + currentUser);
-					response.getWriter().append(jsonString);
-					response.getWriter().append(jsonString2);
-					response.setContentType("application/json");
-					
-					//Set successful HTTP status and release memory
-					//from response.getWriter().
-					response.setStatus(200);
-					response.getWriter().flush();
-					response.getWriter().close();
-				} else {
-					logger.info(currentUser + " logged in as: STANDARD USER.");
-					response.getWriter().append("Welcome " + currentUser);
-					response.getWriter().append(jsonString);
-					response.setContentType("application/json");
-					
-					response.setStatus(200);
-					response.getWriter().flush();
-					response.getWriter().close();
-				}
+				//Retrieve table for STANDARD USER.
+				response.getWriter().append("Welcome " + currentUsername + "!");
+				response.getWriter().append(jsonString);
+				response.setContentType("application/json");
+				response.setStatus(200);
+				response.getWriter().flush();
+				response.getWriter().close();
 			}
 		} catch (IOException e) {
 			response.setStatus(400);
@@ -91,42 +106,110 @@ public class CarServlet extends HttpServlet {
 		} 
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+    /**Adds a row to the Inventory table after user
+	 * enters login criteria.
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
     @Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	
-//    	String username = request.getParameter("username");
-//		String password = request.getParameter("password");
-//		String name = request.getParameter("carName");
-//		String price = request.getParameter("carPrice");
-//		HttpSession session = request.getSession();
-//		
-//		try {
-//			session.setAttribute("username", username);
-//			session.setAttribute("password", password);
-//			session.setAttribute("carName", name);
-//			session.setAttribute("carPrice", price);
-//			String currentUser = (String)session.getAttribute("username");
-//			String currentPassword = (String)session.getAttribute("password");
-//			String currentName = (String)session.getAttribute("carName");
-//			String currentPrice = (String)session.getAttribute("carPrice");
-//		
-//			if (currentUser == null || currentPassword == null) {
-//				response.setStatus(400);
-//			} else {
-//				String jsonString = objectMapper.writeValueAsString(carDAO.addCar(name, price));
-//				response.getWriter().append("Welcome " + currentUser);
-//				response.getWriter().append(jsonString);
-//				response.setStatus(200);
-//				response.getWriter().flush();
-//				response.getWriter().close();
-//			}
-//		} catch (IOException e) {
-//			response.setStatus(400);
-//			e.printStackTrace();
-//		}
+    	//Set endpoint parameters, 
+    	//create HTTP session, and set attributes.
+    	logger.info("Executed HTTP POST request.");
+    	String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String name = request.getParameter("carName");
+		String price = request.getParameter("carPrice");
+		HttpSession session = request.getSession();
+		session.setAttribute("username", username);
+		session.setAttribute("password", password);
+		session.setAttribute("carName", name);
+		session.setAttribute("carPrice", price);
+		String currentUsername = (String)session.getAttribute("username");
+		String currentPassword = (String)session.getAttribute("password");
+		String jsonString = objectMapper.writeValueAsString(carDAO.addCar(name, Integer.parseInt(price)));
+		
+		try {
+			//Return error page if login is 
+			//left empty.
+			if (currentUsername == null || currentPassword == null) {
+				response.setStatus(400);
+				response.getWriter().print("Please enter a username and password.");
+			} else {
+				//Insert new data into DB if password is correct.
+				if (currentPassword.equals("admin")) {
+					logger.info(currentUsername + " logged in as: ADMIN.");
+					response.getWriter().append("Welcome " + currentUsername + "!");
+					response.getWriter().append(jsonString);
+					response.setContentType("application/json");
+					logger.info(currentUsername + " successfully added new data to Inventory table.");
+					response.setStatus(200);
+					response.getWriter().flush();
+					response.getWriter().close();
+				} else {
+					//Set status for unauthorized user.
+					response.setStatus(401);
+					response.getWriter().print("You don't have authorization to modify data.");
+					logger.info(currentUsername + " failed to add data to Inventory table.");
+				}
+			}
+		} catch (IOException e) {
+			response.setStatus(400);
+			e.printStackTrace();
+		}
+    }
+    
+    /**Deletes a row from the Inventory table after user
+	 * enters login criteria.
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException  {
+    	//Set endpoint parameters, 
+    	//create HTTP session, and set attributes.
+    	logger.info("Executed HTTP DELETE request.");
+    	String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String id = request.getParameter("carId");
+		HttpSession session = request.getSession();
+		session.setAttribute("username", username);
+		session.setAttribute("password", password);
+		session.setAttribute("carId", id);
+		String currentUsername = (String)session.getAttribute("username");
+		String currentPassword = (String)session.getAttribute("password");
+		String currentId = (String)session.getAttribute("carId");
+		
+		try {
+			//Return error page if login is 
+			//left empty.
+			if (currentUsername == null || currentPassword == null) {
+				response.setStatus(400);
+				response.getWriter().print("Please enter a username and password.");
+			} else {
+				//Delete row in DB if user has ADMIN
+				//rights and and ID is entered.
+				if (currentPassword.equals("admin")) {
+					if (id != null) {
+						logger.info(currentUsername + " logged in as: ADMIN.");
+						response.getWriter().append("Welcome " + currentUsername + "!\n");
+						response.getWriter().append("Row at ID#: " + id + " has been deleted.");
+						carDAO.deleteCar(Integer.parseInt(id));
+						response.setContentType("application/json");
+						logger.info(currentUsername + " successfully deleted a row in Inventory table.");
+						response.setStatus(200);
+						response.getWriter().flush();
+						response.getWriter().close();
+					}
+				} else {
+					//Set status for unauthorized user.
+					response.setStatus(401);
+					response.getWriter().print("You don't have authorization to modify data.");
+					logger.info(currentUsername + " failed to delete row from Inventory table.");
+				}
+			}
+		} catch (IOException e) {
+			response.setStatus(400);
+			e.printStackTrace();
+		}
     }
 }
 

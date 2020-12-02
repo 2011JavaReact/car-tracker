@@ -33,7 +33,7 @@ public class CustomerTest {
 
 	@Test
 	public void testCustomerCreated() {
-		customer = new Customer(5, "Bill");
+		customer = new Customer(5, 8, "Bill");
 		assertNotNull(customer);
 	}
 	

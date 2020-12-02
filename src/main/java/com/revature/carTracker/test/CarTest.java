@@ -32,7 +32,7 @@ public class CarTest {
 
 	@Test
 	public void testCarCreated() {
-		car = new Car(8, "Test", "80000");
+		car = new Car(8, "Test", 80000);
 		assertNotNull(car);
 	}
 	
@@ -50,7 +50,7 @@ public class CarTest {
 	
 	@Test
 	public void testPriceSet() {
-		car.setPrice("1000");
-		assertEquals(car.getPrice(), "1000");
+		car.setPrice(1000);
+		assertEquals(car.getPrice(), 1000);
 	}
 }
