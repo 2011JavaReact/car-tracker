@@ -1,13 +1,10 @@
+C:\Users\frj07\Documents\Java-Programs\CarTracker\src\main\java\com\revature\carTracker\dao\DatabaseCarDAO.java
 C:\Users\frj07\Documents\Java-Programs\CarTracker\src\main\java\com\revature\carTracker\dao\DatabaseCredentialsDAO.java
-C:\Users\frj07\Documents\Java-Programs\CarTracker\src\main\java\com\revature\carTracker\test\CustomerTest.java
+C:\Users\frj07\Documents\Java-Programs\CarTracker\src\main\java\com\revature\carTracker\model\Customer.java
 C:\Users\frj07\Documents\Java-Programs\CarTracker\src\main\java\com\revature\carTracker\model\Car.java
 C:\Users\frj07\Documents\Java-Programs\CarTracker\src\main\java\Main.java
+C:\Users\frj07\Documents\Java-Programs\CarTracker\src\main\java\com\revature\carTracker\servlet\CarServlet.java
 C:\Users\frj07\Documents\Java-Programs\CarTracker\src\main\java\com\revature\carTracker\servlet\UserLoginServlet.java
 C:\Users\frj07\Documents\Java-Programs\CarTracker\src\main\java\com\revature\carTracker\util\JDBC.java
-C:\Users\frj07\Documents\Java-Programs\CarTracker\src\main\java\com\revature\carTracker\test\JDBCTest.java
-C:\Users\frj07\Documents\Java-Programs\CarTracker\src\main\java\com\revature\carTracker\dao\DatabaseCarDAO.java
-C:\Users\frj07\Documents\Java-Programs\CarTracker\src\main\java\com\revature\carTracker\model\Customer.java
-C:\Users\frj07\Documents\Java-Programs\CarTracker\src\main\java\com\revature\carTracker\test\CarTest.java
-C:\Users\frj07\Documents\Java-Programs\CarTracker\src\main\java\com\revature\carTracker\servlet\CarServlet.java
 C:\Users\frj07\Documents\Java-Programs\CarTracker\src\main\java\com\revature\carTracker\dao\DatabaseCustomerDAO.java
 C:\Users\frj07\Documents\Java-Programs\CarTracker\src\main\java\com\revature\carTracker\servlet\CustomerServlet.java
