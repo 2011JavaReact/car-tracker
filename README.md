@@ -1,7 +1,7 @@
 # Car Tracker
 ## Product Description
 This application connects to a remote database that has been pre-populated with data, modifies it, and displays it to the client after they've logged in with the
-existing credentials in the DB.
+existing credentials in the database.
 
 This application was created using: Java 8, JDBC, Servlets, Tomcat 9.0, PostgreSQL, JUnit, Maven, AWS RDS, and DBeaver.
 
