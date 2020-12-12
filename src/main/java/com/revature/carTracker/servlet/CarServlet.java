@@ -45,11 +45,18 @@ public class CarServlet extends HttpServlet {
     	logger.info("Executed HTTP GET request.");
 		String name = request.getParameter("carName");
 		String id = request.getParameter("carId");
-		HttpSession session = request.getSession(false);
-		if (session == null) {
-			response.setStatus(401);
-			return;
-		}
+		
+		
+//		HttpSession session = request.getSession(false);
+//		if (session == null) {
+//			response.setStatus(401);
+//			return;
+//		}
+		HttpSession session = request.getSession();
+		session.setAttribute("username", "adamAdmin");
+		session.setAttribute("isAdmin", true);
+		
+		
 		String currentUsername = (String)session.getAttribute("username");
 		String jsonString = objectMapper.writeValueAsString(carDAO.getAllCars());
 		String jsonString2 = objectMapper.writeValueAsString(customerDAO.getAllCustomers());
@@ -105,11 +112,18 @@ public class CarServlet extends HttpServlet {
     	logger.info("Executed HTTP POST request.");
 		String name = request.getParameter("carName");
 		String price = request.getParameter("carPrice");
-		HttpSession session = request.getSession(false);
-		if (session == null) {
-			response.setStatus(401);
-			return;
-		}
+		
+		
+//		HttpSession session = request.getSession(false);
+//		if (session == null) {
+//			response.setStatus(401);
+//			return;
+//		}
+		HttpSession session = request.getSession();
+		session.setAttribute("username", "adamAdmin");
+		session.setAttribute("isAdmin", true);
+		
+		
 		String currentUsername = (String)session.getAttribute("username");
 		String jsonString = objectMapper.writeValueAsString(carDAO.addCar(name, Integer.parseInt(price)));
 		try {
@@ -143,11 +157,20 @@ public class CarServlet extends HttpServlet {
     	//create HTTP session, and set attributes.
     	logger.info("Executed HTTP DELETE request.");
 		String id = request.getParameter("carId");
-		HttpSession session = request.getSession(false);
-		if (session == null) {
-			response.setStatus(401);
-			return;
-		}
+		
+		
+		
+//		HttpSession session = request.getSession(false);
+//		if (session == null) {
+//			response.setStatus(401);
+//			return;
+//		}
+		HttpSession session = request.getSession();
+		session.setAttribute("username", "adamAdmin");
+		session.setAttribute("isAdmin", true);
+		
+		
+		
 		String currentUsername = (String)session.getAttribute("username");
 		try {
 			//Delete row in DB if user has ADMIN

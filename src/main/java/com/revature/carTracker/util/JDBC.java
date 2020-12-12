@@ -12,7 +12,6 @@ public class JDBC {
 		String url = System.getenv("DB_URL");
 		String username = System.getenv("DB_USERNAME");
 		String password = System.getenv("DB_PASSWORD");
-		
 		Connection connection = null;
 		
 		DriverManager.registerDriver(new Driver());
