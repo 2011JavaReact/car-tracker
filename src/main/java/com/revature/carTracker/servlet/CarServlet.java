@@ -1,11 +1,8 @@
 package com.revature.carTracker.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +14,9 @@ import org.apache.log4j.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.carTracker.dao.DatabaseCarDAO;
 import com.revature.carTracker.dao.DatabaseCustomerDAO;
+import com.revature.carTracker.model.AdminList;
 import com.revature.carTracker.model.Car;
+import com.revature.carTracker.model.Customer;
 
 /**
  * Servlet implementation class CarServlet
@@ -51,8 +50,12 @@ public class CarServlet extends HttpServlet {
 			return;
 		}
 		String currentUsername = (String)session.getAttribute("username");
-		String jsonString = objectMapper.writeValueAsString(carDAO.getAllCars());
-		String jsonString2 = objectMapper.writeValueAsString(customerDAO.getAllCustomers());
+		ArrayList<Car> cars = carDAO.getAllCars();
+		ArrayList<Customer> customers = customerDAO.getAllCustomers();
+		String jsonString = objectMapper.writeValueAsString(cars);
+		String jsonString2 = objectMapper.writeValueAsString(customers);
+		AdminList admin = new AdminList(cars, customers);
+		String adminList = objectMapper.writeValueAsString(admin);
 		try {
 			//Return data by ID#.
 			if (id != null) {
@@ -75,8 +78,9 @@ public class CarServlet extends HttpServlet {
 			}
 			//Retrieve table for ADMIN.
 			if ((boolean)session.getAttribute("isAdmin")) {
-				response.getWriter().append(jsonString);
-				response.getWriter().append(jsonString2);
+				response.getWriter().append(adminList);
+//				response.getWriter().append(jsonString);
+//				response.getWriter().append(jsonString2);
 				response.setContentType("application/json");
 				response.setStatus(200);
 				response.getWriter().flush();
