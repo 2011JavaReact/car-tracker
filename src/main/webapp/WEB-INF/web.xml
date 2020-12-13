@@ -55,6 +55,10 @@
 		<param-name>cors.allowed.origins</param-name>
 		<param-value>http://localhost:3000, http://cartracker.s3-website.us-east-2.amazonaws.com</param-value>
 	</init-param>
+	<init-param>
+			<param-name>cors.allowed.methods</param-name>
+			<param-value>GET,POST,HEAD,OPTIONS,PUT,DELETE</param-value>
+		</init-param>
 	  <init-param>
 		<param-name>cors.allowed.headers</param-name>
 		<param-value>Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers</param-value>
